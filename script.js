@@ -1,7 +1,20 @@
-var display = document.getElementById('display');
+var klikkaukset = document.getElementById('klikkaukset');
 var keksi = document.getElementById('keksi');
 var kerro = document.getElementById('multiply');
 var autoclick = document.getElementById('autoclick');
+var x = document.getElementById('kerroin');
+var cps = document.getElementById('cps');
+
+var cps = 1000;
+var autoclickHinta = 250;
+var kerroinHinta = 100;
+
+var autoclickPaalla = false;
+var autoclickKerroin = 0;
+
+var pisteet = 0;
+var clickArvo = 1;
+var kerroin = 1;
 
 keksi.addEventListener('click', lisaaPisteita);
 autoclick.addEventListener('click', autoclickKaytossa);
@@ -9,32 +22,40 @@ kerro.addEventListener('click', kasvataKerrointa);
 naytaPisteet();
 naytaKerroin();
 naytaAutoclick();
+Kerroin();
+Autoclicker();
 kerro.disabled = true;
 autoclick.disabled = true;
 
 autoclickInterval = window.setInterval(autoclickF, cps);
 
-var cps = 1000;
-var autoclickHinta = 250;
-var kerroinHinta = 100;
-
-var autoclickPaalla = false;
-var autoclickKerroin = 1;
-
-var pisteet = 0;
-var clickArvo = 1;
-var kerroin = 1;
-
 function naytaPisteet() {
-    display.innerHTML = 'Klikkaukset: ' + pisteet;
+    klikkaukset.innerHTML = 'Klikkaukset: ' + pisteet;
+    
 }
 
 function naytaKerroin() {
-    kerro.value = 'Kerroin ' + kerroin + 'x (Seuraavan tason hinta: ' + kerroinHinta + ' klikkausta)';
+    kerro.value = 'Päivitä kerroin (Hinta: ' + kerroinHinta + ' klikkausta)';
+   
 }
 
 function naytaAutoclick() {
-    autoclick.value = 'Autoclick ' + autoclickKerroin + ' cps (Seuraavan tason hinta: ' + autoclickHinta + ' klikkausta)';
+    if (autoclickPaalla == false) {
+        autoclick.value = 'Osta autoclicker (Hinta: ' + autoclickHinta + ' klikkausta)';
+    } else {
+        autoclick.value = 'Päivitä autoclicker (Hinta: ' + autoclickHinta + ' klikkausta)';
+    }
+    
+    
+    
+}
+
+function Kerroin() {
+    x.innerHTML = 'Kerroin: ' + kerroin + 'x';
+}
+
+function Autoclicker() {
+    cps.innerHTML = 'CPS: ' + autoclickKerroin;
 }
 
 function kerroPaalle() {
@@ -62,6 +83,8 @@ function lisaaPisteita() {
     pisteet += clickArvo;
     napitPaalle();
     naytaPisteet();
+    Kerroin();
+    Autoclicker()
 }
 
 function kasvataKerrointa() {
@@ -70,17 +93,24 @@ function kasvataKerrointa() {
 
     clickArvo = kerroin;
 
-    kerroinHinta += 150;
+    kerroinHinta *= 2;
     napitPaalle();
     naytaPisteet();
     naytaKerroin();
+    naytaAutoclick();
+    Kerroin();
+    Autoclicker()
 }
 
 function autoclickKaytossa() {
     pisteet -= autoclickHinta;
     autoclickPaalla = true;
+    autoclickKerroin += 1;
     naytaPisteet();
     napitPaalle();
+    naytaAutoclick();
+    Kerroin();
+    Autoclicker()
 }
 
 function autoclickF() {
