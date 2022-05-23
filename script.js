@@ -1,16 +1,15 @@
 var klikkaukset = document.getElementById('klikkaukset');
-var keksi = document.getElementById('keksi');
+var keksi = document.getElementById('ok');
 var kerro = document.getElementById('multiply');
 var autoclick = document.getElementById('autoclick');
 var x = document.getElementById('kerroin');
-var cps = document.getElementById('cps');
+var cpshtml = document.getElementById('cps');
 
-var cps = 1000;
+var cps = 0;
 var autoclickHinta = 250;
 var kerroinHinta = 100;
 
 var autoclickPaalla = false;
-var autoclickKerroin = 0;
 
 var pisteet = 0;
 var clickArvo = 1;
@@ -27,7 +26,7 @@ Autoclicker();
 kerro.disabled = true;
 autoclick.disabled = true;
 
-autoclickInterval = window.setInterval(autoclickF, cps);
+autoclickInterval = window.setInterval(autoclickF, 1000);
 
 function naytaPisteet() {
     klikkaukset.innerHTML = 'Klikkaukset: ' + pisteet;
@@ -55,7 +54,7 @@ function Kerroin() {
 }
 
 function Autoclicker() {
-    cps.innerHTML = 'CPS: ' + autoclickKerroin;
+    cpshtml.innerHTML = 'CPS: ' + cps;
 }
 
 function kerroPaalle() {
@@ -87,6 +86,14 @@ function lisaaPisteita() {
     Autoclicker()
 }
 
+function AutoLisaaPisteita() {
+    pisteet += cps;
+    napitPaalle();
+    naytaPisteet();
+    Kerroin();
+    Autoclicker()
+}
+
 function kasvataKerrointa() {
     pisteet -= kerroinHinta;
     kerroin *= 2;
@@ -105,7 +112,8 @@ function kasvataKerrointa() {
 function autoclickKaytossa() {
     pisteet -= autoclickHinta;
     autoclickPaalla = true;
-    autoclickKerroin += 1;
+    cps += 1;
+    autoclickHinta += 500;
     naytaPisteet();
     napitPaalle();
     naytaAutoclick();
@@ -115,6 +123,6 @@ function autoclickKaytossa() {
 
 function autoclickF() {
     if (autoclickPaalla) {
-        lisaaPisteita();
+        AutoLisaaPisteita();
     }
 }
